@@ -1,0 +1,21 @@
+#!/bin/sh
+# Copyright (C) 2013-2014 www.hiwifi,com
+#
+
+. /lib/platform.sh
+
+mtk_phylong_setup() {
+	local board="$1"
+	case "$board" in
+	"HC5861")
+		uci set phylong.config.wan_port=0
+		uci commit phylong
+	;;
+	esac
+}
+
+board=$(tw_board_name)
+
+mtk_phylong_setup $board
+
+exit 0

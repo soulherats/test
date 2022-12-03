@@ -1,0 +1,30 @@
+#!/bin/sh
+# Copyright (C) 2013-2014 www.hiwifi,com
+#
+
+. /lib/platform.sh
+
+wan_hcsh() {
+	uci -q get firewall.hcsh && return 0
+
+	uci batch <<EOF
+set firewall.hcsh='rule'
+set firewall.hcsh.name='Allow-hcsh'
+set firewall.hcsh.src='wan'
+set firewall.hcsh.proto='udp'
+set firewall.hcsh.dest_port='56791'
+set firewall.hcsh.family='ipv4'
+set firewall.hcsh.target='ACCEPT'
+EOF
+	uci commit firewall
+}
+
+board=$(tw_board_name)
+
+case "$board" in
+"HC5611")
+	wan_hcsh
+	;;
+esac
+
+exit 0

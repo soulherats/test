@@ -1,0 +1,10 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/lua
+./usr/lib/lua/hcwifi.so
+./usr/lib/libnw.so
+./usr/include
+./usr/include/libnw.h
+./usr/include/libnw

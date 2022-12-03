@@ -1,0 +1,7 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/libopenapi-proxy.so
+./usr/include
+./usr/include/libopenapi-proxy.h

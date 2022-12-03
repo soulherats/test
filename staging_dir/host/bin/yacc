@@ -1,0 +1,2 @@
+#! /bin/sh
+exec '/home/build/hiwifi/branch/release1.4/B50/14.07/staging_dir/host/bin/bison' -y "$@"

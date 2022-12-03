@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ "$ACTION" = ifup -a "$INTERFACE" = lan ] || exit 0
+
+. /lib/functions.sh
+. /lib/network/switch.sh
+
+logger -t switch "reset switch($INTERFACE)"
+reset_switch_vlan

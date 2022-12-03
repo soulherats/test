@@ -1,0 +1,18 @@
+#!/bin/sh
+
+logger -t "wps-midea" "start midea wps"
+
+setled timer green midea 250 250
+
+# start midea wps
+himsg -p wireless -m smart -b '{"ifname":"master","type":"midea"}'
+
+sleep 120
+
+netstate="$(cat /tmp/state/inet_stat 2> /dev/null)"
+
+if [[ "inet_up" = "$netstate" ]]; then
+	setled on green midea
+else
+	setled timer green midea 1000 1000
+fi

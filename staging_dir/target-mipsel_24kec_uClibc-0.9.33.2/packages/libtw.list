@@ -1,0 +1,9 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/libtw.so.0.1.0
+./usr/lib/libtw.so.0
+./usr/lib/libtw.so
+./usr/include
+./usr/include/libtw.h

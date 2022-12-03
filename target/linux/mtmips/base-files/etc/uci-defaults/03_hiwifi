@@ -1,0 +1,178 @@
+#!/bin/sh
+#
+
+. /lib/functions.sh
+. /lib/mtmips.sh
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+hiwifi_fix_setup()
+{
+	local board="$1"
+
+	case $board in
+	"B50")
+		local s_type=$(uci -q get hiwifi.storage.type)
+		[ "$s_type" == "NULL" ] && {
+			uci set hiwifi.storage.type=TF
+			uci set hiwifi.storage.minsize=3000M
+		}
+		;;
+	esac
+}
+
+hiwifi_setup()
+{
+	local board="$1"
+
+	case $board in
+	"HCMT7621"*)
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "1" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	"HC5961")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "1"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	"HC5962" | "HC5963" | "HC5964")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	"BL-WR4122H")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "1"
+		ucidef_set_hiwifi_storage "USB" "3000M"
+		;;
+	"HC5761s" | "HC5761")
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "1" "0"
+		ucidef_set_hiwifi_storage "SD" "3000M"
+		;;
+	"R7628AC1" | "BL-AC1200D")
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "1" "0"
+		ucidef_set_hiwifi_storage "TF" "3000M"
+		;;
+	"HE5665" | "LY-1A300"*)
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "0" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	"HC5661" | "HC5661s" | "ZC-9525A")
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "0" "0"
+		ucidef_set_hiwifi_storage "SD" "3000M"
+		;;
+	"HC5861")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "1"
+		ucidef_set_hiwifi_storage "TF" "3000M"
+		;;
+	"B50")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "1"
+		ucidef_set_hiwifi_storage "TF" "3000M"
+		;;
+	"R33")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "1"
+		ucidef_set_hiwifi_storage "USB" "3000M"
+		;;
+	"R32")
+		ucidef_set_hiwifi_board "$board" "router" "1" "1" "1" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	"R31")
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "0" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+        "BL-F300")
+                ucidef_set_hiwifi_board "$board" "router" "1" "0" "0" "0"
+                ucidef_set_hiwifi_storage "USB" "3000M"
+                ;;
+        "BL-W1210")
+                ucidef_set_hiwifi_board "$board" "router" "1" "0" "1" "0"
+                ucidef_set_hiwifi_storage "USB" "3000M"
+                ;;
+	"HC5861B")
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "1" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	"HC5642")
+		ucidef_set_hiwifi_board "$board" "star" "1" "0" "0" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	*)
+		ucidef_set_hiwifi_board "$board" "router" "1" "0" "0" "0"
+		ucidef_set_hiwifi_storage "NULL" "0M"
+		;;
+	esac
+}
+
+hiwifi_board_wlan_setup() {
+	case "$1" in
+	"ZC"* | "HB"*)
+		# ZC-xxxx 63
+		ucidef_set_hiwifi_wlan_max "63" "63"
+		;;
+	*)
+		ucidef_set_hiwifi_wlan_max "32" "32"
+		;;
+	esac
+}
+
+hiwifi_eeprom_setup()
+{
+	local board="$1"
+
+	case $board in
+	"HC5861" | "HC5962" | "HC5964")
+		val=$(iwpriv rai0 e2p 6e|sed -n 2p|cut -b 12-15)
+		val2=$(iwpriv rai0 e2p 8c|sed -n 2p|cut -b 12-15)
+
+		if [ $val = "001A" ] && [ $val2 = "001A" ];then
+			iwpriv rai0 e2p 6e=001E
+			iwpriv rai0 e2p 8c=001E
+		fi
+		;;
+	esac
+}
+
+hiwifi_info_setup()
+{
+	local board="$1"
+
+	case $board in
+	"HC5961")
+		ucidef_set_hiwifi_info 0 1 1 1 1
+		;;
+	"HC5962")
+		ucidef_set_hiwifi_info 0 1 1 0 1
+		;;
+	"HC5861" | "HC5761" | "HC5761A" | "HB5881")
+		ucidef_set_hiwifi_info 1 1 0 0 0
+		;;
+	"HC5661" | "HC5661A" | "ZC-9527" | "ZC-9527R")
+		ucidef_set_hiwifi_info 1 0 0 0 0
+		;;
+	"R33")
+		ucidef_set_hiwifi_info 0 1 0 0 1
+		;;
+	"R32")
+		ucidef_set_hiwifi_info 0 0 0 0 1
+		;;
+	"BL-F300")
+		ucidef_set_hiwifi_info 0 1 0 0 0
+		;;
+	"BL-WR4122H")
+		ucidef_set_hiwifi_info 1 0 1 0 0
+		;;
+	*)
+		ucidef_set_hiwifi_info 0 0 0 0 0
+		;;
+	esac
+}
+
+board=$(tw_board_name)
+
+hiwifi_setup $board
+hiwifi_fix_setup $board
+hiwifi_board_wlan_setup $board
+hiwifi_eeprom_setup $board
+hiwifi_info_setup $board
+
+ucidef_commit_hiwifi
+
+exit 0

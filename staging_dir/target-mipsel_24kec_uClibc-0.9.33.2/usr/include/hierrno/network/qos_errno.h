@@ -1,0 +1,26 @@
+#ifndef _Qos_Errno_
+#define _QOs_Errno_
+
+#include "../hierrno.h"
+
+
+
+#define HIERRNO_QOS_FAILED   (HIERRNO_NETWORK_QOS | 0x01) //Qos配置失败
+#define HIERRNO_QOS_ARGUMENT_ERROR   (HIERRNO_NETWORK_QOS | 0x02) //参数不合法
+#define HIERRNO_QOS_UNKOWN_ERROR  (HIERRNO_NETWORK_QOS | 0x03) //未知错误
+#define HIERRNO_QOS_IPRANGE_INVALID  (HIERRNO_NETWORK_QOS | 0x04) //例外ip段非法
+#define HIERRNO_QOS_IPRANGE_ERROR  (HIERRNO_NETWORK_QOS | 0x05) //例外ip配置失败
+#define HIERRNO_QOS_IP_INVALID  (HIERRNO_NETWORK_QOS | 0x06) //ip非法
+#define HIERRNO_QOS_NO_MEMORY  (HIERRNO_NETWORK_QOS | 0x07) //系统资源不足
+#define HIERRNO_QOS_MODE_INVALID  (HIERRNO_NETWORK_QOS | 0x08) //Qos模式非法
+#define HIERRNO_QOS_PRIO_INVALID  (HIERRNO_NETWORK_QOS | 0x09) //Qos优先级非法
+#define HIERRNO_QOS_TOTAL_BW_INVALID  (HIERRNO_NETWORK_QOS | 0x0a) //总带宽值非法
+#define HIERRNO_QOS_DEVICE_BW_INVALID  (HIERRNO_NETWORK_QOS | 0x0b) //单设备限速值非法
+#define HIERRNO_QOS_MAC_INVALID  (HIERRNO_NETWORK_QOS | 0x0c) //终端MAC非法
+#define HIERRNO_QOS_NO_WORKING  (HIERRNO_NETWORK_QOS | 0x0d) //Qos未启动
+#define HIERRNO_QOS_Accelate_No_Guest  (HIERRNO_NETWORK_QOS | 0x0e) //一键加速启动过程中无法开启访客限速
+#define HIERRNO_QOS_Guaran_Device_Conflict  (HIERRNO_NETWORK_QOS | 0x0f) //待取消保证带宽设备非实际运行设备
+#define HIERRNO_QOS_Accelate_No_TotalBW  (HIERRNO_NETWORK_QOS | 0x10) //一键加速无法获取总带宽
+#define HIERRNO_QOS_GUEST_LIMIT_ERROR  (HIERRNO_NETWORK_QOS | 0x11) //访客网络限速失败
+
+#endif

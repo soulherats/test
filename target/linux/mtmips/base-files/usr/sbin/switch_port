@@ -1,0 +1,52 @@
+#!/bin/sh
+
+hiwifi_switch_name=$(uci -q get hiwifi.switch.name)
+hiwifi_lan_ports=$(uci get hiwifi.switch.lanports)
+hiwifi_wan_ports=$(uci get hiwifi.switch.wanports)
+
+switch_lan_downup() {
+	case "$switch_name" in
+	"rtl8367")
+		for port in $1
+		do
+			switch phy w $port 0 0x1340
+		done
+		;;
+	"mt7530")
+		for port in $1
+		do
+			switch_mt7530 phy w $port 0 0x3300
+		done
+		;;
+	*)
+		for port in $1
+		do
+			switch phy w $port 0 0x3300
+		done
+		;;
+	esac
+}
+
+switch_wan_downup() {
+	case "$switch_name" in
+	"rtl8367")
+		switch phy w $1 0 0x1340
+		;;
+	"mt7530")
+		switch_mt7530 phy w $1 0 0x3300
+		;;
+	*)
+		switch phy w $1 0 0x3300
+		;;
+	esac
+}
+
+case "$1" in
+"lan")
+    switch_lan_downup "$hiwifi_lan_ports"
+    ;;
+"wan")
+    switch_wan_downup "$hiwifi_wan_ports"
+    ;;
+esac
+

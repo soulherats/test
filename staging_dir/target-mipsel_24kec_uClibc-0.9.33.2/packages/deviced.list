@@ -1,0 +1,6 @@
+./
+./host
+./usr
+./usr/include
+./usr/include/deviced.h
+./usr/include/dev_iot.h

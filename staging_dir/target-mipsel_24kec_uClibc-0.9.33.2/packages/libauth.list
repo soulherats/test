@@ -1,0 +1,9 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/libauth.so
+./usr/lib/lua
+./usr/lib/lua/auth.so
+./usr/include
+./usr/include/auth.h

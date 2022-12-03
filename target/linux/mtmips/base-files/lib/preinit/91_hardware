@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# Copyright (C) 2012-2016 hiwifi.com
+#
+
+. /lib/functions.sh
+. /lib/platform.sh
+. /lib/functions/oem.sh
+
+hiwifi_hardware_detect() {
+	case "$1" in
+	"HC5861")
+		case "$2" in
+		"2")
+			cp /etc/wlan/mt7612e/mt7612e.eeprom.ipailna.bin /etc/wlan/mt7612e.eeprom.bin
+		;;
+		esac
+		;;
+	esac
+}
+
+hiwifi_subboard_detect() {
+	case "$1" in
+	"HC5861")
+		# old board
+		case "$3" in
+		"BBF" | "HC5863")
+			f_mark=$(get_factory_epa_ipa_mark Factory)
+			if [ "$f_mark" != "20" ]; then
+				# HC5863/BBF use ipa/ilna for 5G
+				cp /etc/wlan/mt7612e.eeprom.ipa.ilnabin /etc/wlan/mt7612e.eeprom.bin
+				mtd erase Factory
+			fi
+			;;
+		esac
+
+		# new board
+		case "$2" in
+		"BBF" | "HC5863")
+			f_mark=$(get_factory_epa_ipa_mark Factory)
+			if [ "$f_mark" != "20" ]; then
+				# BBF use ipa/ilna for 5G
+				cp /etc/wlan/mt7612e.eeprom.ipa.ilnabin /etc/wlan/mt7612e.eeprom.bin
+				mtd erase Factory
+			fi
+			;;
+		esac
+		;;
+	esac
+}
+
+do_ralink_subboard() {
+	local board=$(tw_board_name)
+	local h_ver=$(hiwifi_hardware_version)
+	local subboard=$(get_def_subboard)
+	local def_board=$(get_def_board)
+
+	# make sure libbdinfo work ok
+	mkdir -p /var/run/ 2>/dev/null
+	mkdir -p /var/lock/ 2>/dev/null
+
+	hiwifi_hardware_detect $board $h_ver
+	hiwifi_subboard_detect $board $subboard
+}
+
+boot_hook_add preinit_main do_ralink_subboard

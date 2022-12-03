@@ -1,0 +1,7 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/libeasy_uci.so
+./usr/include
+./usr/include/easy_uci.h

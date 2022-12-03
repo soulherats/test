@@ -1,0 +1,16 @@
+#ifndef _IOT_Errno_
+#define _IOT_Errno_
+
+#include "../hierrno.h"
+
+#define HIERRNO_IOT_FAILED   (HIERRNO_DEVICE_IOT | 0x01) //未知错误
+#define HIERRNO_IOT_ARGUMENT_ERROR   (HIERRNO_DEVICE_IOT | 0x02) //参数错误
+#define HIERRNO_IOT_NOT_ENOUGH_MEMORY  (HIERRNO_DEVICE_IOT | 0x03) //没有足够系统资源
+#define HIERRNO_IOT_EMPTY_DEVNAME	   (HIERRNO_DEVICE_IOT | 0x05) //设备名称不能为空
+#define HIERRNO_IOT_TOOLONG_DEVNAME	   (HIERRNO_DEVICE_IOT | 0x06) //设备名称不能超过30个字符
+#define HIERRNO_IOT_NOT_FIND_VENDOR  (HIERRNO_DEVICE_IOT | 0x07) //没有找到对应的iot驱动
+#define HIERRNO_IOT_NOT_FIND_METHOD  (HIERRNO_DEVICE_IOT | 0x08) //没有找到对应的iot方法
+#define HIERRNO_IOT_PARAM_NO_KEY  (HIERRNO_DEVICE_IOT | 0x09) //配置参数不合法 
+#define HIERRNO_IOT_PARAM_NO_VALUE  (HIERRNO_DEVICE_IOT | 0x0a) //配置参数值不合法
+#endif
+

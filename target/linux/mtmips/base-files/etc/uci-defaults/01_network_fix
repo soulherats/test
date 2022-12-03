@@ -1,0 +1,54 @@
+#!/bin/sh
+
+. /lib/functions.sh
+. /lib/mtmips.sh
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+# old ROM no mtkswitch config
+mtkswitch_vlan_fix()
+{
+	local board="$1"
+
+	case $board in
+	"HCMT7621"* | "HC5961" | "HC5962" | "HC5963" | "HC5964" | "BL-WR4122H")
+		ucidef_add_mtkswitch_vlan "mt7621" "LLLLW"
+		;;
+	"HC5861" | "HC5661" | "HC5761" | "HC5663" | "ZC-9527R" | "ZC-9528" |\
+	"ZC-9525" | "ZC-9526" | "HB5881" | "HM578" | "BL-T8100" | "BL-855R")
+		ucidef_add_mtkswitch_vlan "mt7620" "WLLLL"
+		;;
+	"HB5811" | "ZC-9527")
+		ucidef_add_mtkswitch_vlan "mt7620" "LLLLL"
+		;;
+	"BL-H750AC" | "WIFI-Link-2950")
+		ucidef_add_mtkswitch_vlan "mt7620" "LLLLW"
+		;;
+	"HC5761s" | "HC5661s" | "ZC-9525A" | "R31")
+		ucidef_add_mtkswitch_vlan "mt7628" "LLLLW"
+		;;
+	"R7628AC1" | "BL-AC1200D" | "HC5861B" | "HC5661B" | "BL-F300" | "G13")
+		ucidef_add_mtkswitch_vlan "mt7628" "WLLLL"
+		;;
+	"HC5611")
+		ucidef_add_mtkswitch_vlan "mt7628" "LLLWL"
+		;;
+	"B50")
+		ucidef_add_mtkswitch_vlan "mt7620" "GLLLL"
+		;;
+	"R33" | "BL-W1210")
+		ucidef_add_mtkswitch_vlan "mt7620" "LLLLW"
+		;;
+	"HC5642")
+		ucidef_add_mtkswitch_vlan "mt7628" "LLLLW"
+		;;
+	esac
+}
+
+board=$(tw_board_name)
+
+mtkswitch_vlan_fix $board
+
+uci commit network
+
+exit 0

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+. /lib/hw/base.sh
+. /lib/hw/switch.sh
+. /lib/hw/storage.sh
+
+case "$1" in
+	"switch")
+		switch_test
+	;;
+	"usb3")
+		usb3_test
+	;;
+	"usb2")
+		usb2_test
+	;;
+	"sata")
+		sata_test
+	;;
+	"mmc")
+		mmc_test
+	;;
+	"nand")
+		nand_test
+	;;
+	*)
+		switch_test
+		usb3_test
+		usb2_test
+		sata_test
+		mmc_test
+		nand_test
+	;;
+esac
+
+echo "$HIWIFI_HW_OK" >$HIWIFI_HW_TEST_FILE
+
+exit 0
+

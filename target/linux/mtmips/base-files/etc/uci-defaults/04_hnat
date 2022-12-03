@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# Copyright (C) 2012-2014 www.hiwifi.com
+#
+
+. /lib/functions.sh
+. /lib/platform.sh
+. /lib/functions/uci-defaults.sh
+
+mtk_hnat_setup() {
+	uci -q get hnat.mtk.set_default && return 0
+
+	case "$1" in
+	"R32" | "R33" | "B50" | "HC5961" | "HC5962" | "HC5963" | "HC5964" | "BL-WR4122H")
+		uci set hnat.mtk.enabled=1
+		uci set hnat.mtk.support=1
+		uci set hnat.mtk.set_default=1
+		uci commit hnat
+		;;
+	"BL-W1210")
+		uci set hnat.mtk.support=1
+		uci set hnat.mtk.set_default=1
+		uci commit hnat
+		;;	
+	esac
+}
+
+board=$(tw_board_name)
+
+mtk_hnat_setup $board
+
+exit 0

@@ -1,0 +1,62 @@
+/*
+ * Mediatek machine types
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ */
+
+#include <asm/mips_machine.h>
+
+enum mtk_mach_type {
+	MTK_MACH_GENERIC,
+	
+	/* MT7621 Router machines */
+	MTK_MACH_HCMT7621,
+	MTK_MACH_HCMT7621_S128,
+	MTK_MACH_HCMT7621_N128,
+	MTK_MACH_HC5961,
+	MTK_MACH_HC5962,
+	MTK_MACH_HC5963,
+	MTK_MACH_HC5964,
+	MTK_MACH_BLWR412H,
+	
+	/* MT7620 machines */
+	MTK_MACH_HC5661,
+	MTK_MACH_HC5761,
+	MTK_MACH_HC5663,
+	MTK_MACH_HC5861,
+	MTK_MACH_HB5881,
+	MTK_MACH_HB5811,
+	MTK_MACH_HB750ACH,
+	MTK_MACH_HB8100,
+	MTK_MACH_HB845H,
+	MTK_MACH_ZC9525,
+	MTK_MACH_ZC9526,
+	MTK_MACH_ZC9527,
+	MTK_MACH_ZC9527R,
+	MTK_MACH_ZC9528,
+	MTK_MACH_HM578,
+	MTK_MACH_WIFILink2950,
+
+	/* MT7628 machines */
+	MTK_MACH_HC5662,
+	MTK_MACH_HC5642,
+	MTK_MACH_HB5801,
+	MTK_MACH_G13,
+	MTK_MACH_HC5661s,
+	MTK_MACH_HC5761s,
+	MTK_MACH_ZC9525A,
+	MTK_MACH_HC5611,
+	MTK_MACH_R7628AC1,
+	MTK_MACH_AC1200D,
+	MTK_MACH_HC5861B,
+	MTK_MACH_HC5661B,
+	MTK_MACH_GE160,
+	MTK_MACH_B50,
+	MTK_MACH_R33,
+	MTK_MACH_R32,
+	MTK_MACH_R31,
+	MTK_MACH_BLF300,
+	MTK_MACH_BLW1210,
+};

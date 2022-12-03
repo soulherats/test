@@ -1,0 +1,7 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/libhwf-log.so
+./usr/include
+./usr/include/hwf_log.h

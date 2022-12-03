@@ -1,0 +1,133 @@
+#!/bin/sh
+
+. /lib/platform.sh
+. /lib/functions/uci-defaults.sh
+
+hiwifi_switch_setup()
+{
+	local board="$1"
+
+	case $board in
+	"HC5961" | "HC5962" | "HC5963" | "HC5964")
+		ucidef_add_hiwifi_switch "mt7621"
+		ucidef_set_hiwifi_switch_lanports "1 2 3" "eth2"
+		ucidef_set_hiwifi_switch_wanports "4" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "1"
+		;;
+	"BL-WR4122H")
+                ucidef_add_hiwifi_switch "mt7621"
+                ucidef_set_hiwifi_switch_lanports "0 1 2 3" "eth2"
+                ucidef_set_hiwifi_switch_wanports "4" "eth2"
+                ucidef_set_hiwifi_switch_wan_support_giga "1"
+		;;
+	"HC5761s")
+		ucidef_add_hiwifi_switch "mt7628"
+		ucidef_set_hiwifi_switch_lanports "0 1" "eth2"
+		ucidef_set_hiwifi_switch_wanports "4" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"HC5661s" | "ZC-9525A")
+		ucidef_add_hiwifi_switch "mt7628"
+		ucidef_set_hiwifi_switch_lanports "0 1 2 3" "eth2"
+		ucidef_set_hiwifi_switch_wanports "4" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"R7628AC1" | "BL-AC1200D" | "HC5861B" | "HC5661B" | "BL-F300")
+		ucidef_add_hiwifi_switch "mt7628"
+		ucidef_set_hiwifi_switch_lanports "1 2 3 4" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"HC5611")
+		ucidef_add_hiwifi_switch "mt7628"
+		ucidef_set_hiwifi_switch_lanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wanports "3" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"HC5861")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "1 5" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"B50")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "0 1" "eth2"
+		ucidef_set_hiwifi_switch_wanports "5" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "1"
+		;;
+	"R32")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "0 1 2" "eth2"
+		ucidef_set_hiwifi_switch_wanports "5" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "1"
+		;;
+	"R33")
+		ucidef_add_hiwifi_switch "rtl8367"
+		ucidef_set_hiwifi_switch_lanports "1 2" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "1"
+		;;
+        "BL-W1210")
+                ucidef_add_hiwifi_switch "mt7530"
+                ucidef_set_hiwifi_switch_lanports "1 2 3 4" "eth2"
+                ucidef_set_hiwifi_switch_wanports "0" "eth2"
+                ucidef_set_hiwifi_switch_wan_support_giga "1"
+                ;;
+	"R31")
+		ucidef_add_hiwifi_switch "mt7628"
+		ucidef_set_hiwifi_switch_lanports "0 1 2" "eth2"
+		ucidef_set_hiwifi_switch_wanports "4" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"HC5661" | "BL-T8100" | "BL-855R" | "HC5663" | "ZC-9525")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "1 2 3 4" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"BL-H750AC")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "3 2 1 0" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"G13")
+		ucidef_add_hiwifi_switch "mt7628"
+		ucidef_set_hiwifi_switch_lanports "3" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"HB5881" | "ZC-9526" | "ZC-9528")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "1 3 4" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"HC5761" | "HM578" | "ZC-9527R")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "1 2 3 4" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"ZC-9527")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "4" "eth2"
+		ucidef_set_hiwifi_switch_wanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	"WIFI_Link-2950")
+		ucidef_add_hiwifi_switch "mt7620"
+		ucidef_set_hiwifi_switch_lanports "0" "eth2"
+		ucidef_set_hiwifi_switch_wanports "4" "eth2"
+		ucidef_set_hiwifi_switch_wan_support_giga "0"
+		;;
+	esac
+}
+
+board=$(tw_board_name)
+
+hiwifi_switch_setup $board
+ucidef_commit_hiwifi
+
+exit 0

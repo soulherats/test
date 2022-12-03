@@ -1,0 +1,10 @@
+prefix=/home/build/hiwifi/branch/release1.4/B50/14.07/build_dir/target-mipsel_24kec_uClibc-0.9.33.2/libcgroup-0.41/ipkg-install
+exec_prefix=/home/build/hiwifi/branch/release1.4/B50/14.07/build_dir/target-mipsel_24kec_uClibc-0.9.33.2/libcgroup-0.41/ipkg-install
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libcgroup
+Description: Control Group Configuration Library
+Version: 0.41
+Libs: -L${libdir} -lcgroup
+Cflags: -I${includedir}

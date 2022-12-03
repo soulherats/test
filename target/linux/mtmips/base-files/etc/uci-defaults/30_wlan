@@ -1,0 +1,77 @@
+#!/bin/sh
+# Copyright (C) 2013-2014 www.hiwifi,com
+#
+
+. /lib/platform.sh
+
+board=$(tw_board_name)
+mac_suffix=$(tw_get_mac)
+mac_suffix=${mac_suffix:6:6}
+macaddr=$(ifconfig eth2 | grep HWaddr | awk '{ print $5 }' | awk -F: '{printf "D6:"$2":"$3":"$4":"$5":"$6}')
+
+case "$board" in
+"HC5642")
+	sed -i "s/^MacAddress=/MacAddress=${macaddr}/g" /etc/wlan/mt7628/mt7628.dat
+	sed -i 's/wpad -s/wpad -c/g' /etc/init.d/wpad
+	smt=$(uci -q get wireless.radio0.smt)
+	uci set wireless.radio0.channel=6
+	uci set wireless.radio0.repeater="1"
+	[ -n "$smt" ] || {
+		uci set wireless.radio0.smt="1"
+		uci set wireless.@wifi-iface[0].ssid="STAR_"${mac_suffix}
+	}
+	uci set wireless.@wifi-iface[0].macaddr=${macaddr}
+	uci set wireless.@wifi-iface[1].macaddr="$(ifconfig eth2 | grep HWaddr | awk '{ print $5 }')"
+	;;
+"HB5801")
+	sed -i 's/"_5G"//g' /lib/wifi/mediatek.sh
+	sed -i 's/wpad -s/wpad -c/g' /etc/init.d/wpad
+	sed -i 's/^HT_BW=1/HT_BW=0/g' /etc/wlan/mt7628/mt7628.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/mt7628/mt7628.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/mt7612e/mt7612e.dat
+	;;
+"HC5611")
+	txpwr_fix=$(uci -q get wireless.radio0.txpwr_fix)
+	if [ "$txpwr_fix" != "1" ]; then
+		uci set wireless.radio0.txpwr_fix=1
+		uci set wireless.radio0.txpwr=140
+	fi
+	;;
+"HC5861B" | "HC5861")
+	sed -i 's/^HT_STBC=0/HT_STBC=1/g' /etc/wlan/mt7612e/mt7612e.dat
+	sed -i 's/^VHT_STBC=0/VHT_STBC=1/g' /etc/wlan/mt7612e/mt7612e.dat
+	;;
+"B50" | "R33" | "R32" | "BL-W1210")
+	sed -i 's/^HT_STBC=0/HT_STBC=1/g' /etc/wlan/mt7612e/mt7612e.dat
+	sed -i 's/^VHT_STBC=0/VHT_STBC=1/g' /etc/wlan/mt7612e/mt7612e.dat
+	;;
+"HB5881" | "ZC-9528")
+	sed -i 's/"_5G"//g' /lib/wifi/ralink.sh
+	sed -i 's/^HT_BW=1/HT_BW=0/g' /etc/wlan/RT2860.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/RT2860.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/iNIC_ap.dat
+	uci set wireless.radio0.channel=6
+	;;
+"HB5811")
+	sed -i 's/wpad -s/wpad -c/g' /etc/init.d/wpad
+	sed -i 's/^HT_BW=1/HT_BW=0/g' /etc/wlan/RT2860.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/RT2860.dat
+	;;
+"ZC-9527")
+	sed -i 's/"_5G"//g' /lib/wifi/ralink.sh
+	sed -i 's/wpad -s/wpad -c/g' /etc/init.d/wpad
+	sed -i 's/^HT_BW=1/HT_BW=0/g' /etc/wlan/RT2860.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/RT2860.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/iNIC_ap.dat
+	;;
+"ZC-9527R" | "ZC-9526")
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/RT2860.dat
+	sed -i 's/^MaxStaNum=32/MaxStaNum=64/g' /etc/wlan/iNIC_ap.dat
+	;;
+esac
+
+uci rename wireless.@wifi-iface[0]=master
+uci rename wireless.@wifi-iface[1]=slave
+uci rename wireless.@wifi-iface[2]=guest
+uci commit wireless
+exit 0

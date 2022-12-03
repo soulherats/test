@@ -1,0 +1,8 @@
+./
+./host
+./usr
+./usr/lib
+./usr/lib/libhicloud.so
+./usr/include
+./usr/include/hicloud.h
+./usr/include/codec.h

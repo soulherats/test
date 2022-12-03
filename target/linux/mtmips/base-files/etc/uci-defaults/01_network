@@ -1,0 +1,87 @@
+#!/bin/sh
+
+. /lib/functions.sh
+. /lib/mtmips.sh
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+# mt7620
+# hiwifi:HC5661/HC5761/HC5861/B50/R33/ZC-9525/ZC-9527/R32
+# blink: H750AC/WIFI-Link-2950/BL-855R/BL-T8100
+# 
+# mt7628
+# hiwifi: HC5661s/HC5761s/HC5861B/ZC-9525A/HC5642/HC5611
+# blink: R7628AC1/BL-AC1200D
+#
+# mt7621
+# hiwifi: HC5961/HC5962
+mtmips_setup_interfaces()
+{
+	local board="$1"
+
+	ucidef_set_interface_loopback
+
+	case $board in
+	"HCMT7621"* | "HC5961" | "HC5962" | "BL-WR4122H")
+		ucidef_set_interfaces_lan_wan "eth2" "eth3"
+		ucidef_add_mtkswitch_vlan "mt7621" "LLLLW"
+		;;
+	"HC5963" | "HC5964")
+                ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+                ucidef_add_mtkswitch_vlan "mt7621" "LLLLW"
+		;;
+	"HC5861" | "HC5661" | "HC5761" | "HC5663" | "ZC-9527R" | "ZC-9528" |\
+	"ZC-9525" | "ZC-9526" | "HB5881" | "HM578" | "BL-T8100" | "BL-855R")
+		# mt7620 router
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7620" "WLLLL"
+		;;
+	"HB5811" | "ZC-9527")
+		# mt7620 AP
+		ucidef_set_interface_lan_dhcp "eth2.1"
+		ucidef_add_mtkswitch_vlan "mt7620" "LLLLL"
+		;;
+	"H750AC" | "WIFI-Link-2950")
+		# mt7620 BLINK
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7620" "LLLLW"
+		;;
+	"HC5761s" | "HC5661s" | "ZC-9525A" | "R31")
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7628" "LLLLW"
+		;;
+	"BL-F300" | "BL-AC1200D" | "HC5861B" | "HC5661B" | "R7628AC1" | "G13")
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7628" "WLLLL"
+		;;
+	"HC5611")
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7628" "LLLLW"
+		uci set network.lan.ipaddr='10.1.199.1'
+		;;
+	"B50" | "R32")
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7620" "GLLLL"
+		;;
+	"R33" | "BL-W1210")
+		ucidef_set_interfaces_lan_wan "eth2.1" "eth2.2"
+		ucidef_add_mtkswitch_vlan "mt7620" "LLLLW"
+		;;
+	"HC5642")
+		ucidef_set_interface_lan "eth2.1"
+		ucidef_add_mtkswitch_vlan "mt7628" "LLLLW"
+		;;
+	esac
+}
+
+[ -e /etc/config/network ] && exit 0
+
+touch /etc/config/network
+
+board=$(tw_board_name)
+
+mtmips_setup_interfaces $board
+
+uci commit network
+
+exit 0

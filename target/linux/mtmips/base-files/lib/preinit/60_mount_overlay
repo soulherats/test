@@ -1,0 +1,85 @@
+#!/bin/sh
+
+wait_for_overlay_mtd_dev() {
+	while true
+	do
+		local mtd_dev=$(find_mtd_part "overlay")
+		if [ -e "$mtd_dev" ]; then
+			break
+		else
+			sleep 1
+		fi
+	done
+}
+
+wait_for_overlay_ubidev() {
+	while true
+	do
+		local ubidev=$(nand_find_ubi "overlay")
+		if [ -n "$ubidev" ]; then
+			break
+		else
+			sleep 1
+		fi
+	done
+}
+
+do_mount_overlayfs() {
+	. /lib/functions.sh
+	. /lib/functions/nand.sh
+	. /lib/functions/preinit.sh
+	. /lib/mtmips.sh
+
+	local board_flash=$(mtmips_board_flash)
+
+	echo "boot from $board_flash" >/dev/kmsg
+
+	[ "$board_flash" != "nand" ] && return
+
+	o_index=$(find_mtd_index "overlay")
+	
+	if [ -z $o_index ]; then
+		return
+	fi
+
+	# wait for dev create
+	wait_for_overlay_mtd_dev
+
+	ubidetach -m $o_index >/dev/null 2>&1
+	ubiattach /dev/ubi_ctrl -m $o_index
+
+	if [ "$?" -eq 0 ]; then
+		# wait ubidev
+		wait_for_overlay_ubidev
+		ubidev=$(nand_find_ubi "overlay")
+		mkdir -p /overlay
+		mount -t ubifs $ubidev:overlay /overlay
+		if [ "$?" -ne 0 ]; then
+			echo "mount $ubidev(/dev/mtd$o_index) failed, remake ubifs($ubidev)" >>/tmp/overlay_nand.log
+			ubidetach -m $o_index
+			flash_eraseall /dev/mtd$o_index
+			ubiattach /dev/ubi_ctrl -m $o_index
+			ubidev=$(nand_find_ubi "overlay")
+			ubimkvol /dev/$ubidev -N overlay -m
+			mount -t ubifs $ubidev:overlay /overlay
+		fi
+	else
+		echo "attach /dev/mtd$o_index failed" >>/tmp/overlay_nand.log
+		flash_eraseall /dev/mtd$o_index
+		ubiattach /dev/ubi_ctrl -m $o_index
+		if [ "$?" -eq 0 ]; then
+			# wait ubidev
+			wait_for_overlay_ubidev		
+			ubidev=$(nand_find_ubi "overlay")
+			mkdir -p /overlay
+			ubimkvol /dev/$ubidev -N overlay -m
+			mount -t ubifs $ubidev:overlay /overlay
+		else
+			echo "ubiattach /dev/mtd$o_index) failed" >>/tmp/overlay_nand.log
+		fi
+	fi
+
+	fopivot /overlay /rom
+}
+
+[ "$INITRAMFS" = "1" ] || boot_hook_add preinit_main do_mount_overlayfs

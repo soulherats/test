@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ "$ACTION" = "add" ]; then
+	case "$DEVICENAME" in
+	"eth2" | "eth3" | "ra0" | "rai0")
+		smp.sh
+		;;
+	esac
+fi
