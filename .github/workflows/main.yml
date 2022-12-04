@@ -1,0 +1,17 @@
+name: Build
+
+on: 
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - uses: actions/checkout@v2
+    - name: Setup Debug Session
+      uses: csexton/debugger-action@master
